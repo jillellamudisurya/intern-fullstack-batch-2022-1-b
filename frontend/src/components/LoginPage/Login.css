@@ -1,0 +1,61 @@
+.loginGlobalDiv{
+    background-image:url('C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\ecommercebg.jpg');
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    opacity: 0.9;
+}
+
+.loginFormDiv{
+    border: 2px solid black;
+    border-radius: 40px;
+    padding: 20px;
+    margin-top: 5%;
+    width: 40%;
+    margin-left: 25%;
+}
+
+form{
+    padding: 15px;
+}
+
+.formInput{
+    border-radius: 10px;
+    padding: 7px;
+    margin-bottom: 5px;
+}
+
+.errors{
+    color: red;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn{
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+    width: 20%;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #008CBA;
+    color: white;
+    font-weight: bold;
+}
+.btn:hover{
+    box-shadow: 5px 5px rgb(104, 144, 104);
+    background-color: green;
+}
+
+.toggleLogin{
+    color: black;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.heading{
+    text-align: left;
+    color: rgb(28, 51, 182);
+}

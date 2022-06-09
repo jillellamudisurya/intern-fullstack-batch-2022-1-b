@@ -1,0 +1,40 @@
+.products{
+    display: inline-block;
+    height: 180px;
+    width: 18%;
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product1.jpg");
+    background-size: contain;
+    margin-right: 15px;
+}
+
+.products:hover{
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product2.jpg");
+}
+
+.drivers{
+    display: inline-block;
+    height: 180px;
+    width: 18%;
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product1.jpg");
+    background-size: contain;
+    margin-right: 15px;
+}
+.drivers:hover{
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product2.jpg");
+}
+
+.categories{
+    display: inline-block;
+    height: 180px;
+    width: 18%;
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product1.jpg");
+    background-size: contain;
+    margin-right: 15px;
+}
+.categories:hover{
+    background-image: url("C:\Users\surya\OneDrive\Desktop\Ecommerce Application\frontend\product2.jpg");
+}
+.combineDiv{
+    margin-top: 15%;
+}
+
