@@ -1,15 +1,25 @@
 import React from "react";
 import './Admin.css'
 import { Link } from "react-router-dom";
-import { logout } from "../../store/authenticationSlice";
-
+import { logoutUser } from "../../store/authenticationSlice";
+import { useDispatch } from "react-redux";
 
 export default function Admin(){
+
+    const dispatch = useDispatch();
+
+    function handleLogout(){
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('user');
+        dispatch(logoutUser)
+        window.location.href ='/'
+    }
+
     return(
         <div className="loginGlobalDiv">
         <div>
             <h1>This is Admins Home Page</h1>
-            <Link to='/login'>Logout</Link>
+            <button onClick={handleLogout}>Logout</button>
             <div className="combineDiv">
                 
                 <div className="products">

@@ -16,10 +16,16 @@ module.exports = (sequelize, DataTypes) => {
   orders.init({
     user_id: DataTypes.INTEGER,
     product_id: DataTypes.INTEGER,
+    address_id: DataTypes.INTEGER,
+    driver_id: DataTypes.INTEGER,
     delivered_status: DataTypes.BOOLEAN,
-    driver_id: DataTypes.INTEGER
+    ordered_at: DataTypes.DATE,
+    quantity: DataTypes.INTEGER,
+    order_status: DataTypes.INTEGER,
+    order_amount: DataTypes.INTEGER
   }, {
-    timestamps:false,
+    createdAt:false,
+    updatedAt:false,
     sequelize,
     modelName: 'orders',
   });

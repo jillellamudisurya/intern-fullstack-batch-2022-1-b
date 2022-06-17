@@ -15,12 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   addresses.init({
     user_id: DataTypes.INTEGER,
-    hno: DataTypes.STRING,
-    village: DataTypes.STRING,
-    mandal: DataTypes.STRING,
-    district: DataTypes.STRING,
-    state: DataTypes.STRING,
-    pincode: DataTypes.INTEGER
+    address: DataTypes.STRING,
+    lanlat:DataTypes.STRING
   }, {
     timestamps:false,
     sequelize,

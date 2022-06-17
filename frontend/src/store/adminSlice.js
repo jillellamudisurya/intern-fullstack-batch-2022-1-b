@@ -5,7 +5,8 @@ export const adminSlice = createSlice({
     initialState:{
         totalDrivers:[],
         totalCategories:[],
-        totalProducts:[]
+        totalProducts:[],
+        totalUsers : []
     },
     reducers:{
         loadDrivers:(state,action)=>{
@@ -19,13 +20,17 @@ export const adminSlice = createSlice({
         loadProducts:(state,action)=>{
             state.totalProducts = [];
             state.totalProducts.push(action.payload);
+        },
+        loadUsers:(state,action)=>{
+            state.totalUsers=[];
+            state.totalUsers.push(action.payload);
         }
     }
 });
 
 export function getDriverData(){
     return ((dispatch)=>{
-      fetch('http://localhost:2424/getDrivers')
+      fetch('http://localhost:3700/getDrivers')
       .then((res)=>res.json())
       .then((data)=>{
         dispatch(loadDrivers(data))
@@ -35,7 +40,7 @@ export function getDriverData(){
 
   export  function getAllCategories(){
       return((dispatch)=>{
-          fetch("http://localhost:2424/getCategories")
+          fetch("http://localhost:3700/getCategories")
           .then((res)=>res.json())
           .then((data)=>{
               dispatch(loadCategories(data))
@@ -45,7 +50,7 @@ export function getDriverData(){
 
   export function getAllProducts(){
       return((dispatch)=>{
-          fetch("http://localhost:2424/getProducts")
+          fetch("http://localhost:3700/getProducts")
           .then((res)=>res.json())
           .then((data)=>{
               dispatch(loadProducts(data))
@@ -53,9 +58,19 @@ export function getDriverData(){
       })
   }
 
+  export function getAllUsers(){
+      return((dispatch)=>{
+        fetch("http://localhost:3700/allusers")
+        .then((res)=>res.json())
+        .then((data)=>{
+            dispatch(loadUsers(data))
+        })
+      })
+  }
+
   export function addCategory(newCategory){
       return((dispatch)=>{
-        fetch("http://localhost:2424/addCategory",{
+        fetch("http://localhost:3700/addCategory",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -82,7 +97,7 @@ export function getDriverData(){
 
   export function addProduct(newProduct){
     return((dispatch)=>{
-        fetch("http://localhost:2424/addProduct",{
+        fetch("http://localhost:3700/addProduct",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -107,5 +122,44 @@ export function getDriverData(){
       })
   }
 
-export const {loadDrivers,loadCategories,loadProducts}  = adminSlice.actions;
+  export function productEnable(prod){
+      return((dispatch)=>{
+          const token = localStorage.getItem('token');
+          const user = localStorage.getItem('user')
+
+          console.log("id::",prod.id)
+
+          fetch(`http://localhost:3700/enableproduct/${prod.id}`,{
+              method:'PUT',
+              headers:{
+                  'Content-Type':'application/json',
+                  'token':token,
+                  'user':user
+              }
+          })
+          .then((res)=>res.json())
+          .then((data)=>dispatch(getAllProducts()))
+          .catch((err)=>console.log("ProductAvai Err:",err))
+      }
+  )}
+  export function productDisable(prod){
+    return((dispatch)=>{
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user')
+
+        fetch(`http://localhost:3700/disableproduct/${prod.id}`,{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json',
+                'token':token,
+                'user':user
+            }
+        })
+        .then((res)=>res.json())
+        .then((data)=>dispatch(getAllProducts()))
+        .catch((err)=>console.log("ProductAvai Err:",err))
+    }
+)}
+
+export const {loadDrivers,loadCategories,loadProducts,loadUsers}  = adminSlice.actions;
 export default adminSlice.reducer;

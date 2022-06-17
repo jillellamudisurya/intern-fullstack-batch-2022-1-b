@@ -13,6 +13,9 @@ import AddDriver from './components/AdminScreens/AddDriver';
 import DriverScreen from './components/AdminScreens/driverScreen';
 import CategoriesScreen from './components/AdminScreens/categoriesScreen';
 import ProductsScreen from './components/AdminScreens/productsScreen';
+import Cart from './components/UserScreens/cart';
+import Address from './components/UserScreens/Address';
+import AllOrders from './components/UserScreens/Allorders';
 
 function App() {
   return (
@@ -36,7 +39,13 @@ function App() {
           <Route path='/admin/productsScreen' element={<ProductsScreen/>}/>
           <Route path='/admin/categoriesScreen' element={<CategoriesScreen/>}/>
           <Route path='/admin/driverScreen' element={<DriverScreen/>}/>
-          
+
+          {/* User Screens */}
+
+          <Route path='/user/cart' element={<Cart/>}/>
+          <Route path='/user/address' element={<Address/>}/>
+          <Route path='/user/allorders' element={<AllOrders/>}/>
+        
         </Routes>
       </BrowserRouter>
     </div>

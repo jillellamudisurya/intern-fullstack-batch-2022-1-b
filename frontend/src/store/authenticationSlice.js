@@ -17,13 +17,17 @@ export const authenticationSlice = createSlice({
         },
         loggeduser:(state,action)=>{
             state.loggeduser = action.payload;
+        },
+        logout:(state,action)=>{
+            state.loggeduser='';
+            state.tokenlog=null
         }
     }
 });
 
 export function getData(){
     return((dispatch)=>{
-        fetch('http://localhost:2424/allusers')
+        fetch('http://localhost:3700/allusers')
         .then((res)=>res.json())
         .then((data)=>dispatch(loadusers(data[0])))
     })
@@ -31,7 +35,7 @@ export function getData(){
 
 export function loginUser(loguser){
     return(dispatch)=>{
-        fetch("http://localhost:2424/loginauthentication",{
+        fetch("http://localhost:3700/loginauthentication",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -84,7 +88,7 @@ export function loginUser(loguser){
 
 export function registerUser(newuser){
     return(dispatch)=>{
-        fetch("http://localhost:2424/registeruser",{
+        fetch("http://localhost:3700/registeruser",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -112,7 +116,7 @@ export function registerUser(newuser){
 export function addDriver(newUser){
     return (dispatch)=>{
 
-        fetch("http://localhost:2424/addDriver",{
+        fetch("http://localhost:3700/addDriver",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -139,12 +143,11 @@ export function addDriver(newUser){
     }
 }
 
-export function logout(){
-    alert("Logout Called");
-    window.localStorage.setItem('token',null);
-    window.localStorage.setItem('user',null)
-    window.location.reload();
+export function logoutUser(){
+    return(dispatch)=>{
+        dispatch(logout)
+    }
 }
 
-export const {loadusers,loadtoken,loggeduser} = authenticationSlice.actions;
+export const {loadusers,loadtoken,loggeduser,logout} = authenticationSlice.actions;
 export default authenticationSlice.reducer;
