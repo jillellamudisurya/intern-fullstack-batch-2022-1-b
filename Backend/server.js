@@ -10,7 +10,12 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 var cors = require('cors');
-app.use(cors());
+const corsOptions = {
+    origin:'*',
+    credentials:true,
+    optionSuccessStatus:200,
+}
+app.use(cors(corsOptions));
 
 //Models
 var models=require('./models')
@@ -28,6 +33,9 @@ var jwt = require('jsonwebtoken');
 
 var port = process.env.PORT || 3700
 
+app.get('/',async(req,res)=>{
+    res.send("Hello World")
+})
 
 app.post('/loginauthentication',async(req,res)=>{
     const {email,password} = req.body
@@ -76,6 +84,7 @@ app.post('/registeruser',async(req,res)=>{
 
         if(!userExist){
             let createNewUser = await models.users.create(newUser);
+            console.log("I am new User::",createNewUser)
             await models.allcarts.create({user_id:createNewUser.id})
             res.status(200).json({message:'User Created'});
         }
@@ -84,7 +93,7 @@ app.post('/registeruser',async(req,res)=>{
         }
     }
     catch(err){
-        res.status(500).send("Hi Bro",err);
+        res.status(500).send(err);
     }
 })
 
@@ -363,7 +372,7 @@ app.post('/placeallorders',async(req,res)=>{
         const fr = await models.orderedproducts.bulkCreate(bo);
         const de = await models.usercarts.destroy({where:{cart_id:ci}})
         res.send(data)
-        window.location.href='/user/home'
+        
     }
     catch(err){
         res.status(500).send(err)
@@ -545,4 +554,4 @@ app.get('/alldriverorders',async(req,res)=>{
 
 
 
-app.listen(port,function(req,res){console.log("Port is Running")})
+app.listen(port,function(req,res){console.log("Port is Running",port)})

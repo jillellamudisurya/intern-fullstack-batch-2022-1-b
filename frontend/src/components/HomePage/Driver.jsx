@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux'; 
-import productimg from '../../product.jpg';
 import { getTotalOrders } from "../../store/driverSlice";
 import { logoutUser } from "../../store/authenticationSlice";
 import './Driver.css'

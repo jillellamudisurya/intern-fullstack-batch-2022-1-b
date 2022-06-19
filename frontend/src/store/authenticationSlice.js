@@ -27,15 +27,16 @@ export const authenticationSlice = createSlice({
 
 export function getData(){
     return((dispatch)=>{
-        fetch('http://localhost:3700/allusers')
+        fetch('https://ecommerce-postgres-backend.herokuapp.com/allusers',{
+        })
         .then((res)=>res.json())
-        .then((data)=>dispatch(loadusers(data[0])))
+        .then((data)=>dispatch(loadusers(data)))
     })
 }
 
 export function loginUser(loguser){
     return(dispatch)=>{
-        fetch("http://localhost:3700/loginauthentication",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/loginauthentication",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -46,6 +47,7 @@ export function loginUser(loguser){
             if(res.status===200){
                 res.json()
                 .then((data)=>{
+                    console.log("DataLogin:::",data)
                     if(data.user.role_id===1){
                         alert("Login Success as Admin")
                         localStorage.setItem('token',data.token)
@@ -88,7 +90,7 @@ export function loginUser(loguser){
 
 export function registerUser(newuser){
     return(dispatch)=>{
-        fetch("http://localhost:3700/registeruser",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/registeruser",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -116,7 +118,7 @@ export function registerUser(newuser){
 export function addDriver(newUser){
     return (dispatch)=>{
 
-        fetch("http://localhost:3700/addDriver",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/addDriver",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

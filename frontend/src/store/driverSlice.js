@@ -24,7 +24,7 @@ export function getTotalOrders(){
   const user = window.localStorage.getItem('user');
   return(dispatch)=>{
     console.log("I am working");
-    fetch('http://localhost:3700/alldriverorders',{
+    fetch('https://ecommerce-postgres-backend.herokuapp.com/alldriverorders',{
       method:'GET',
       headers:{
         'Content-Type':'application/json',

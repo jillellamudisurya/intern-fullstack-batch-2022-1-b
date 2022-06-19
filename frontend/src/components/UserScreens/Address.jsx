@@ -51,6 +51,7 @@ export default function Address(){
     function handlePlaceAllOrder(address){
         console.log("******************All Cart Items::",allCartItems)
         dispatch(placeAllOrders(allCartItems,address))
+        window.location.href='/user/home'
     }
 
     return(
