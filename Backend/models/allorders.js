@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     driver_id: DataTypes.INTEGER,
     delivered_status: DataTypes.BOOLEAN,
     ordered_at: DataTypes.DATE,
-    order_amout: DataTypes.BIGINT,
+    order_amount: DataTypes.BIGINT,
     order_status: DataTypes.INTEGER
   }, {
     createdAt:false,

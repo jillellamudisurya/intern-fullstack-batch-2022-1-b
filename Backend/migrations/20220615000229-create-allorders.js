@@ -35,7 +35,7 @@ module.exports = {
       ordered_at: {
         type: Sequelize.DATE
       },
-      order_amout: {
+      order_amount: {
         type: Sequelize.INTEGER
       },
       order_status: {

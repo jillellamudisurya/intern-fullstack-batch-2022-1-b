@@ -1,5 +1,23 @@
 .driverCard{
     margin: 10px;
-    background-color: grey;
+    background-color: rgb(237, 236, 236);
     display: inline-block;
+    padding: 15px;
+    border: 2px solid black;
+    border-radius: 20px;
 }
+.cardHeader{
+    margin-bottom: 5px;
+    background-color: rgb(194, 203, 210);
+    padding: 5px;
+    border: 1px solid grey;
+    box-shadow: 2px 2px;
+    border-radius: 10px;
+}
+.display{
+    display: block;
+}
+.hide{
+    display: none;
+}
+

@@ -15,6 +15,8 @@ export default function User(){
     const allCategories = useSelector((state)=>state.admin.totalCategories[0])
     const allProducts = useSelector((state)=>state.admin.totalProducts[0])
 
+    var localUser = JSON.parse(window.localStorage.getItem('user'))
+
     const dispatch = useDispatch();
 
     useEffect(()=>{
@@ -33,6 +35,7 @@ export default function User(){
 
     function handleAddCart(id){
         dispatch(addToCart(id))
+        alert("Added To Cart");
     }
 
     function handleOrder(prod){
@@ -46,16 +49,19 @@ export default function User(){
     
 
     return(
-        <div>
-            <h1>User's HomePage</h1>
-            <button onClick={handleLogout}>Logout</button>
-            <br/>
-            <Link to="/user/cart">Cart</Link>
+        <div className="loginGlobalDiv">
+            <Button onClick={handleLogout}>Logout</Button>
+            
+            <h1>Hi, {(localUser.name).toUpperCase()}!!! It's Your HomePage</h1>
+            
+            <Button><Link to="/user/cart">Cart</Link></Button>
+            
 
             {/* Category Display */}
             <Container>
                 <Row>
-                    <select onChange={(e)=>{setCategoryFilter(parseInt(e.target.value))}}>
+                <br/>
+                    <select className="formInput" onChange={(e)=>{setCategoryFilter(parseInt(e.target.value))}}>
                         <option>Select Category</option>
                         {
                             allCategories&&allCategories.map((eachCat)=>{

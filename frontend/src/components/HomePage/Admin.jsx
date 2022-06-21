@@ -3,8 +3,12 @@ import './Admin.css'
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../store/authenticationSlice";
 import { useDispatch } from "react-redux";
+import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 
 export default function Admin(){
+
+    var localUser =JSON.parse(window.localStorage.getItem('user')) 
+    console.log("Local User ra Unga::",localUser)
 
     const dispatch = useDispatch();
 
@@ -18,8 +22,11 @@ export default function Admin(){
     return(
         <div className="loginGlobalDiv">
         <div>
-            <h1>This is Admins Home Page</h1>
-            <button onClick={handleLogout}>Logout</button>
+            <h1>Hey Admin, {(localUser.name).toUpperCase()} </h1>
+            
+            <Button onClick={handleLogout}>LOGOUT</Button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button><Link to="/admin/allorders">All Orders</Link></Button>
             <div className="combineDiv">
                 
                 <div className="products">

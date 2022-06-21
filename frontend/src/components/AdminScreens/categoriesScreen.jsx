@@ -16,25 +16,22 @@ export default function CategoriesScreen(){
     },[])
     console.log("Categs::",allCategories);
     return(
-        <div>
+        <div className="loginGlobalDiv">
             <h1>Displaying All Categories</h1>
 
-            <Link to="/admin/addCategory">Add Category</Link>
-
+            <Button><Link to='/admin/home'>Go To Home</Link></Button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button><Link to="/admin/addCategory">Add Category</Link></Button>
+            <br/>
             <br/>
             {allCategories&&allCategories.map((ec,i)=>(
                    <Card key={i} className="driverCard">
-                       <Card.Header>Category ID: {ec.id}</Card.Header>
+                       <Card.Header className="cardHeader">Category ID: {ec.id}</Card.Header>
                        <Card.Body>
-                           <Card.Title>{ec.category}</Card.Title>
+                           <Card.Title>{(ec.category).toUpperCase()}</Card.Title>
                        </Card.Body>
                    </Card>
                 ))}
-
-                <br/>
-
-                <Link to='/admin/home'>Go To Home</Link>
-            
         </div>
     )
 }

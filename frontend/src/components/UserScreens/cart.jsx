@@ -10,7 +10,7 @@ import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 export default function Cart(){
 
     const cartProducts = useSelector((state)=>state.user.loadAllCartProducts[0]);
-    var payment = 0;
+    var localUser = JSON.parse(window.localStorage.getItem('user'))
 
     const dispatch = useDispatch();
 
@@ -28,9 +28,9 @@ export default function Cart(){
     }
 
     return(
-        <div>
-            <h1>Cart</h1>
-            <Link to="/user/home">Go To Home</Link>
+        <div className='loginGlobalDiv'>
+            <Button><Link to="/user/home">Go To Home</Link></Button>
+            <h1>{(localUser.name).toUpperCase()}'s Cart</h1>
             <Container>
                 <Row>
                     {cartProducts&&cartProducts.map((eachcart,i)=>(

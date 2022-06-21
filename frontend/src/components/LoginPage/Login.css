@@ -1,10 +1,13 @@
 .loginGlobalDiv{
-    /* background-image:url('https://www.marketing91.com/wp-content/uploads/2018/09/How-to-Sell-a-Product-with-Blogging-4.jpg'); */
+    background-image:url('https://www.marketing91.com/wp-content/uploads/2018/09/How-to-Sell-a-Product-with-Blogging-4.jpg');
     background-repeat: no-repeat;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     position: absolute;
     opacity: 0.9;
+    background-size: cover;
+    background-attachment: fixed;
+    overflow: auto;
 }
 
 .loginFormDiv{
@@ -40,12 +43,12 @@ form{
     border: 2px solid black;
     border-radius: 10px;
     background-color: #008CBA;
-    color: white;
+    color: black;
     font-weight: bold;
 }
 .btn:hover{
     box-shadow: 5px 5px rgb(104, 144, 104);
-    background-color: green;
+    background-color: yellow;
 }
 
 .toggleLogin{

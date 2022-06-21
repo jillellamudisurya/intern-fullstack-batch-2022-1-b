@@ -27,9 +27,11 @@ export default function ProductsScreen(){
 
     return(
         <div className="loginGlobalDiv">
+            <Button><Link to='/admin/home'>Go To Home</Link></Button>
+            <br/>
             <h1 >Displaying All Products</h1>
 
-            <Link to="/admin/addProduct">Add Product</Link>
+            <Button><Link to="/admin/addProduct">Add Product</Link></Button>
 
             <br/>
             <Container className='p-4'>
@@ -53,10 +55,7 @@ export default function ProductsScreen(){
                 </Row>
                 
             </Container>
-
-                <br/>
-
-                <Link to='/admin/home'>Go To Home</Link>
+                
             
         </div>
     )

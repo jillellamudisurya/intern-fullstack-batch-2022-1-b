@@ -4,6 +4,8 @@ import * as yup from 'yup';
 import { Link } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { addProduct,getAllCategories} from "../../store/adminSlice";
+import '../LoginPage/Login.css'
+import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 
 
 export default function AddProduct(){
@@ -60,21 +62,25 @@ export default function AddProduct(){
 
 
     return(
-        <div>
+        
+        <div className="loginGlobalDiv">
+             <div>
+                <Button><Link to='/admin/home'>Go To Home</Link></Button>
+            </div>
             <h1>This is Add Product Section</h1>
 
             <form onSubmit={formik.handleSubmit}>
-                <input type="text" placeholder="Product Name" {...formik.getFieldProps('product_name')} ref={productRef} required />
+                <input type="text" className="formInput" placeholder="Product Name" {...formik.getFieldProps('product_name')} ref={productRef} required />
                 {formik.touched.product_name&&formik.errors.product_name?<div className="errors">{formik.product_name.errors}</div>:null}
                 <br/>
-                <input type="number" placeholder="Enter Price" {...formik.getFieldProps('price')} ref={priceRef} required/>
+                <input type="number" className="formInput" placeholder="Enter Price" {...formik.getFieldProps('price')} ref={priceRef} required/>
                 {formik.touched.price&&formik.errors.price?<div className="errors">{formik.price.errors}</div>:null}
                 <br/>
-                <input type="text"  placeholder="Image"  {...formik.getFieldProps('image')} required/>
+                <input type="text" className="formInput"  placeholder="Image"  {...formik.getFieldProps('image')} required/>
                 {formik.touched.image&&formik.errors.image?<div className="errors">{formik.image.errors}</div>:null}
 
                 <br/>
-                <select {...formik.getFieldProps('category_id')}>
+                <select {...formik.getFieldProps('category_id')} className="formInput" required>
                     <option>Select Category</option>
                     {
                         allCategories&&allCategories.map((eachCate,i)=>{
@@ -87,12 +93,10 @@ export default function AddProduct(){
 
                 <br/>
                   
-                <button type="submit">Add Product</button>
+                <Button type="submit">Add Product</Button>
             </form>
 
-            <div>
-                <Link to='/admin/home'>Go To Home</Link>
-            </div>
+           
 
         </div>
     )

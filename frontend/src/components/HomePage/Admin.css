@@ -2,39 +2,34 @@
     display: inline-block;
     height: 180px;
     width: 18%;
-    background-image: url("https://www.edesk.com/wp-content/uploads/2021/03/find-trending-products-sell-ecommerce.png");
-    background-size: contain;
+    background-image: url("https://wallpaperaccess.com/full/1393334.jpg");
+    background-size: cover;
     margin-right: 15px;
-}
-
-.products:hover{
-    background-image: url("https://www.thepackagingcompany.us/knowledge-sharing/wp-content/uploads/sites/2/2020/09/5-Packaging-Tips-for-Selling-Products-Online-e1599060286874-1026x675.jpg");
 }
 
 .drivers{
     display: inline-block;
     height: 180px;
     width: 18%;
-    background-image: url("");
-    background-size: contain;
+    background-image: url("https://wallpaperaccess.com/full/1393334.jpg");
+    background-size: cover;
     margin-right: 15px;
 }
-.drivers:hover{
-    background-image: url("https://www.thepackagingcompany.us/knowledge-sharing/wp-content/uploads/sites/2/2020/09/5-Packaging-Tips-for-Selling-Products-Online-e1599060286874-1026x675.jpg");
+
+h3{
+    color: black;
 }
 
 .categories{
     display: inline-block;
     height: 180px;
     width: 18%;
-    background-image: url("https://www.edesk.com/wp-content/uploads/2021/03/find-trending-products-sell-ecommerce.png");
-    background-size: contain;
+    background-image: url("https://wallpaperaccess.com/full/1393334.jpg");
+    background-size: cover;
     margin-right: 15px;
 }
-.categories:hover{
-    background-image: url("https://www.thepackagingcompany.us/knowledge-sharing/wp-content/uploads/sites/2/2020/09/5-Packaging-Tips-for-Selling-Products-Online-e1599060286874-1026x675.jpg");
-}
+
 .combineDiv{
-    margin-top: 15%;
+    margin-top: 10%;
 }
 

@@ -10,12 +10,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 var cors = require('cors');
-const corsOptions = {
-    origin:'*',
-    credentials:true,
-    optionSuccessStatus:200,
-}
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Models
 var models=require('./models')
@@ -73,7 +68,7 @@ app.post('/loginauthentication',async(req,res)=>{
 app.post('/registeruser',async(req,res)=>{
     console.log("********Register Here***********")
     console.log("Body:::::",req.body)
-    const {name,email,phonenumber,password,role_id} = req.body;
+    const {name,phonenumber,password,role_id,email} = req.body;
 
     var newUser = {name,email,phonenumber,password,role_id}
     console.log("New User:::",newUser)
@@ -82,10 +77,15 @@ app.post('/registeruser',async(req,res)=>{
     try{
         let userExist = await models.users.findOne({where:{email:email}})
 
+        // console.log("Hey I am executing")
+
         if(!userExist){
+            // console.log("Hey I am also Executing")
             let createNewUser = await models.users.create(newUser);
-            console.log("I am new User::",createNewUser)
-            await models.allcarts.create({user_id:createNewUser.id})
+            // console.log("I am new User::",createNewUser)
+            // console.log("New User ID:: ",createNewUser.id)
+            await models.allcarts.create({user_id:parseInt(createNewUser.id)})
+            // console.log("Dandalu Dhora")
             res.status(200).json({message:'User Created'});
         }
         else{
@@ -93,6 +93,7 @@ app.post('/registeruser',async(req,res)=>{
         }
     }
     catch(err){
+        // console.log("NO one executing")
         res.status(500).send(err);
     }
 })
@@ -344,9 +345,13 @@ app.post('/placeallorders',async(req,res)=>{
     var ci = null
     // console.log("I am produts in placeorders",req.body.products)
     req.body.products.map((pro)=>{
+        console.log("Product price is::",pro.product.price)
+        console.log("Product Qunatity is:",pro.quantity)
         ta = ta+((pro.product.price)*(pro.quantity))
+        console.log("Total amount inside::",ta)
         ci = pro.cart_id;
     })
+    console.log("Total amount::",ta)
 
     const no={
         user_id:localUser.id,
@@ -483,6 +488,184 @@ app.put('/disableproduct/:id',async(req,res)=>{
 app.get('/alldriverorders',async(req,res)=>{
     try{
         const orderArray = await models.allorders.findAll({where:{order_status:1}})
+        // console.log("OrdersArray::",orderArray)
+        const userRef = await models.users.findAll()
+        // console.log("UserRef::",userRef)
+        const productsRef = await models.products.findAll()
+        // console.log("ProductsRef",productsRef)
+        const addressesRef = await models.addresses.findAll()
+        const statusRef = await models.orderstatuses.findAll()
+        const orderedProductsArray = await models.orderedproducts.findAll();
+
+        const allOrders = []
+        orderArray.map((oa)=>{
+            const order = {}
+            order.id = oa.id,
+            userRef.map((user)=>{
+                if(oa.user_id===user.id){
+                    order.user_id=user.id;
+                    order.customer=user.name;
+                    order.phonenumber = user.phonenumber
+                }
+            })
+            order.amount = oa.order_amount,
+            order.driver_id = oa.driver_id,
+            order.delivered_status=oa.delivered_status,
+
+            statusRef.map((eachStatus)=>{
+                if(eachStatus.id===oa.order_status){
+                    order.order_status=eachStatus.status
+                }
+            })
+            addressesRef.map((eachAddress)=>{
+                if(eachAddress.id===oa.address_id){
+                    order.address = eachAddress
+                }
+            })
+            let date = new Date(oa.ordered_at)
+            date.setDate(date.getDate()+7)
+            order.ordered_at=oa.ordered_at.getDate()+"/"+oa.ordered_at.getMonth()+"/"+oa.ordered_at.getFullYear(),
+            order.delivery_date=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+
+            const allProducts = []
+            orderedProductsArray.map((productsarray)=>{
+                if(oa.id===productsarray.order_id){
+                    productsRef.map((eachProduct)=>{
+                        if(productsarray.product_id==eachProduct.id){
+                            const pro = {
+                                product_id:productsarray.product_id,
+                                name:eachProduct.product_name,
+                                price:productsarray.price,
+                                quantity:productsarray.quantity
+                            }
+                            allProducts.push(pro)
+                        }
+                    })
+                }
+            })
+            order.products = allProducts
+
+            allOrders.push(order)
+            console.log("order::::",order)
+        })
+
+        res.send(allOrders)
+        console.log("all Orders::",allOrders)
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
+})
+
+app.put('/selectedorder/:id',async(req,res)=>{
+    localUser = JSON.parse(req.headers.user)
+    try{
+     console.log("Local User Driver:::",localUser)
+     const data = await models.allorders.update({driver_id:localUser.id,order_status:2},{where:{id:req.params.id}})
+     const newSelection = {
+       driver_id:req.user.id,
+       order_id:req.params.id,
+       delivered_status:false
+     }
+  
+     const driverOrdersRef = await models.driverorders.create(newSelection);
+     res.send(driverOrdersRef)
+  
+    }
+    catch(err){
+      console.log(err)
+    }
+  })
+
+  app.put('/deliveredorder/:id',async(req,res)=>{
+    localUser = JSON.parse(req.headers.user)
+    try{
+     console.log("Local User Driver:::",localUser)
+     const data = await models.allorders.update({delivered_status:true},{where:{id:req.params.id}})
+     res.send(data)
+  
+    }
+    catch(err){
+      console.log(err)
+    }
+  })
+
+  app.get('/selectedorders',async(req,res)=>{
+      var localUser = JSON.parse(req.headers.user)
+    try{
+        const orderArray = await models.allorders.findAll({where:{driver_id:localUser.id,delivered_status:false}})
+        // console.log("OrdersArray::",orderArray)
+        const userRef = await models.users.findAll()
+        // console.log("UserRef::",userRef)
+        const productsRef = await models.products.findAll()
+        // console.log("ProductsRef",productsRef)
+        const addressesRef = await models.addresses.findAll()
+        const statusRef = await models.orderstatuses.findAll()
+        const orderedProductsArray = await models.orderedproducts.findAll();
+
+        const allOrders = []
+        orderArray.map((oa)=>{
+            const order = {}
+            order.id = oa.id,
+            userRef.map((user)=>{
+                if(oa.user_id===user.id){
+                    order.user_id=user.id;
+                    order.customer=user.name;
+                    order.phonenumber = user.phonenumber
+                }
+            })
+            order.amount = oa.order_amount,
+            order.driver_id = oa.driver_id,
+            order.delivered_status=oa.delivered_status,
+
+            statusRef.map((eachStatus)=>{
+                if(eachStatus.id===oa.order_status){
+                    order.order_status=eachStatus.status
+                }
+            })
+            addressesRef.map((eachAddress)=>{
+                if(eachAddress.id===oa.address_id){
+                    order.address = eachAddress
+                }
+            })
+            let date = new Date(oa.ordered_at)
+            date.setDate(date.getDate()+7)
+            order.ordered_at=oa.ordered_at.getDate()+"/"+oa.ordered_at.getMonth()+"/"+oa.ordered_at.getFullYear(),
+            order.delivery_date=date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
+
+            const allProducts = []
+            orderedProductsArray.map((productsarray)=>{
+                if(oa.id===productsarray.order_id){
+                    productsRef.map((eachProduct)=>{
+                        if(productsarray.product_id==eachProduct.id){
+                            const pro = {
+                                product_id:productsarray.product_id,
+                                name:eachProduct.product_name,
+                                price:productsarray.price,
+                                quantity:productsarray.quantity
+                            }
+                            allProducts.push(pro)
+                        }
+                    })
+                }
+            })
+            order.products = allProducts
+
+            allOrders.push(order)
+            console.log("order::::",order)
+        })
+
+        res.send(allOrders)
+        console.log("all Orders::",allOrders)
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
+})
+
+  app.get('/alladminorders',async(req,res)=>{
+    try{
+        const orderArray = await models.allorders.findAll()
         // console.log("OrdersArray::",orderArray)
         const userRef = await models.users.findAll()
         // console.log("UserRef::",userRef)

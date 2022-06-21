@@ -26,20 +26,20 @@ export default function DriverScreen(){
    
 
     return(
-        <div>
-            
+        <div className="loginGlobalDiv">
+            <Button><Link to="/admin/home">Go To Home</Link></Button>
             <h1>Displaying All Drivers</h1>
-            <Link to="/admin/addDriver">Add Driver</Link>
+            <Button><Link to="/admin/addDriver">Add Driver</Link></Button>
             <div>
                 {drivers&&drivers.map((ed,i)=>(
                    <Card key={i} className="driverCard">
-                       <Card.Header>Driver ID: {ed.id}</Card.Header>
+                       <Card.Header className="cardHeader">Hey {ed.name}</Card.Header>
                        <Card.Body>
-                           <Card.Title>{ed.name}</Card.Title>
+                           <Card.Title>Your ID: {ed.id}</Card.Title>
                            <Card.Text>
-                               Mail Id: <b>{ed.email}</b>
+                               <i>Mail Id: </i><b>{ed.email}</b>
                                <br/>
-                               Phone Number: <b>{ed.phonenumber}</b>
+                               <i>Phone Number: </i><b>{ed.phonenumber}</b>
                            </Card.Text>
                        </Card.Body>
                    </Card>

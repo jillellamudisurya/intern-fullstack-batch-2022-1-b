@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import GooglePlacesAutocomplete,{geocodeByAddress,getLatLng} from 'react-google-places-autocomplete';
 import { useDispatch,useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 import { addAddresses,getAllAddresses,removeAddress,getAllOrders,placeAllOrders, getAllCartProducts } from "../../store/userSlice";
 export default function Address(){
 
@@ -51,18 +52,19 @@ export default function Address(){
     function handlePlaceAllOrder(address){
         console.log("******************All Cart Items::",allCartItems)
         dispatch(placeAllOrders(allCartItems,address))
+        alert("Order Placed Succesfully")
         window.location.href='/user/home'
     }
 
     return(
-        <div>
-            {/* <Link to="/user/allorders">Click for all orders</Link> */}
+        <div className="loginGlobalDiv">
+            <Button><Link to="/user/home">Go To Home</Link></Button>
             <h2>Select Address For Delivery</h2>
             <div>
                 {allAddresses&&allAddresses.map((address,i)=>{
                     return(
                         <div>
-                            <input type="radio" name="radio-btn" id={i} value={address.id} onClick={()=>{setordAddress(address)}}/><span>{address.address}</span>{' '}<i onClick={()=>handleRemoveAddress(address.id)} style={{color:'red'}}>remove</i>
+                            <input type="radio" name="radio-btn" id={i} value={address.id} onClick={()=>{setordAddress(address)}}/><span>{address.address}</span>{' '}<i onClick={()=>handleRemoveAddress(address.id)} style={{color:'red'}}>X</i>
                         </div>
                     )
                 })}
@@ -87,10 +89,10 @@ export default function Address(){
                 </form>
                 </center>
                 
-                <button onClick={()=>addingAddress()}>Add Address</button>
+                <Button onClick={()=>addingAddress()}>Add Address</Button>
             </div>
             <br/>
-            <center><button onClick={()=>{handlePlaceAllOrder(ordAddress)}}>Place Order</button></center>
+            <center><Button onClick={()=>{handlePlaceAllOrder(ordAddress)}}>Place Order</Button></center>
         </div>
     )
 }

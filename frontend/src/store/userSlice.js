@@ -50,7 +50,7 @@ export function getAllCartProducts(){
   console.log("I am user in getallproducts::",user)
 
   return(dispatch)=>{
-    fetch('https://ecommerce-postgres-backend.herokuapp.com/allcartitems',{
+    fetch('http://localhost:3700/allcartitems',{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -73,7 +73,7 @@ export function addToCart(id){
   console.log("I am user",user)
 
   return(dispatch)=>{
-    fetch(`https://ecommerce-postgres-backend.herokuapp.com/addtocart/${id}`,{
+    fetch(`http://localhost:3700/addtocart/${id}`,{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -90,7 +90,7 @@ export function decQuantity(id){
   const token = window.localStorage.getItem('token');
   const user = window.localStorage.getItem('user');
   return(dispatch)=>{
-    fetch(`https://ecommerce-postgres-backend.herokuapp.com/decquantity/${id}`,{
+    fetch(`http://localhost:3700/decquantity/${id}`,{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -106,7 +106,7 @@ export function incQuantity(id){
   const token = window.localStorage.getItem('token');
   const user = window.localStorage.getItem('user');
   return(dispatch)=>{
-    fetch(`https://ecommerce-postgres-backend.herokuapp.com/incquantity/${id}`,{
+    fetch(`http://localhost:3700/incquantity/${id}`,{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -123,7 +123,7 @@ export function addAddresses(newAdd){
   const user = window.localStorage.getItem('user')
 
   return (dispatch)=>{
-    fetch('https://ecommerce-postgres-backend.herokuapp.com/addaddress',{
+    fetch('http://localhost:3700/addaddress',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
@@ -143,7 +143,7 @@ export function removeAddress(id){
   const user = window.localStorage.getItem('user')
 
   return (dispatch)=>{
-    fetch(`https://ecommerce-postgres-backend.herokuapp.com/removeaddress/${id}`,{
+    fetch(`http://localhost:3700/removeaddress/${id}`,{
       method:'DELETE',
       headers:{
         'Content-Type':'application/json',
@@ -160,7 +160,7 @@ export function getAllAddresses(){
   const token = window.localStorage.getItem('token');
   const user = window.localStorage.getItem('user')
   return (dispatch)=>{
-    fetch('https://ecommerce-postgres-backend.herokuapp.com/alladdresses',{
+    fetch('http://localhost:3700/alladdresses',{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -179,7 +179,7 @@ export function getAllOrders(){
   const user = window.localStorage.getItem('user')
 
   return(dispatch)=>{
-    fetch('https://ecommerce-postgres-backend.herokuapp.com/allorders',{
+    fetch('http://localhost:3700/allorders',{
     method:'GET',
     headers:{
       'Content-Type':'application/json',
@@ -199,7 +199,7 @@ export function placeAllOrders(products,address){
   const user = window.localStorage.getItem('user')
 
   return (dispatch)=>{
-    fetch('https://ecommerce-postgres-backend.herokuapp.com/placeallorders',{
+    fetch('http://localhost:3700/placeallorders',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',

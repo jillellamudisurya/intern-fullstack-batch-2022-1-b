@@ -5,7 +5,9 @@ import * as yup from 'yup'
 import YupPassword from 'yup-password'
 import {addDriver} from '../../store/authenticationSlice';
 import {useSelector,useDispatch} from 'react-redux';
-import '../LoginPage/Login.css'
+import '../LoginPage/Login.css';
+import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
+
 
 YupPassword(yup);
 
@@ -78,6 +80,7 @@ export default function AddDriver(){
     return(
         <div className='loginGlobalDiv'>
         <h1 className='heading'>Ecommerce Application</h1>
+        <Button><Link to='/admin/home'>Go To Home</Link></Button>
     <div className='loginFormDiv'>
         <h2>REGISTER</h2>
         <form onSubmit={formik.handleSubmit}>
@@ -101,8 +104,6 @@ export default function AddDriver(){
 
         </form>
     </div>
-
-    <Link to='/admin/home'>Go To Home</Link>
     </div>
     )
 }
