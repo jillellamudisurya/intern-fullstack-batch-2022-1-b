@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {Container ,Card,Row, Col, Button} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux'; 
 import { Link } from "react-router-dom";
-import { getAllOrders } from "../../store/adminSlice";
+import { getAllOrders,orderAccept,orderReject } from "../../store/adminSlice";
 
 
 export default function AllOrders(){
@@ -16,6 +16,16 @@ export default function AllOrders(){
     useEffect(()=>{
         dispatch(getAllOrders())
     },[dispatch])
+
+    function handleAccept(id){
+        dispatch(orderAccept(id))
+        alert("Order Accepted Successfully")
+    }
+
+    function handleReject(id){
+        dispatch(orderReject(id))
+        alert("Order Rejected")
+    }
 
     return (
         <div className="loginGlobalDiv">
@@ -56,6 +66,14 @@ export default function AllOrders(){
                                     <i>Order Amount: </i><b>{order.amount} Rs/-</b>
                                     <br/>
                                     <i>Address: </i><b>{order.address.address}</b>
+                                    <br/>
+                                    <i>Phone Number: </i><b>{order.phonenumber}</b>
+                                    <br/>
+                                    <i>Order Status: </i><b>{order.order_status}</b>
+                                    <div className={order.order_status==='pending'?'display':'hide'}>
+                                        <Button onClick={()=>{handleAccept(order.id)}}>Accept</Button>
+                                        <Button onClick={()=>{handleReject(order.id)}}>Reject</Button>
+                                    </div>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -98,6 +116,9 @@ export default function AllOrders(){
                                     <i>Order Amount: </i><b>{order.amount} Rs/-</b>
                                     <br/>
                                     <i>Address: </i><b>{order.address.address}</b>
+                                    <br/>
+                                    <i>Order Status: </i><b>{order.order_status}</b>
+                                    <br/>
                                 </Card.Text>
                             </Card.Body>
                         </Card>

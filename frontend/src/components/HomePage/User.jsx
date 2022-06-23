@@ -53,7 +53,9 @@ export default function User(){
             <Button onClick={handleLogout}>Logout</Button>
             
             <h1>Hi, {(localUser.name).toUpperCase()}!!! It's Your HomePage</h1>
-            
+
+            <Button><Link to="/user/placedorders">Placed Orders</Link></Button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <Button><Link to="/user/cart">Cart</Link></Button>
             
 
@@ -88,7 +90,7 @@ export default function User(){
                                                 <b>{ep.price}Rs/-</b>
                                                 <br/>
                                                 <Button onClick={()=>handleAddCart(ep.id)}>Add To Cart</Button>
-                                                <Button onClick={()=>handleOrder(ep)}>Buy Now</Button>
+                                                {/* <Button onClick={()=>handleOrder(ep)}>Buy Now</Button> */}
                                             </Card.Text>
                                         </center>
                                     </Card.Body>
@@ -111,8 +113,8 @@ export default function User(){
                                                 <br/>
                                                 <b>{ep.price}Rs/-</b>
                                                 <br/>
-                                                <Button>Add To Cart</Button>
-                                                <Button>Buy Now</Button>
+                                                <Button  onClick={()=>handleAddCart(ep.id)}>Add To Cart</Button>
+                                                {/* <Button>Buy Now</Button> */}
                                             </Card.Text>
                                         </center>
                                     </Card.Body>

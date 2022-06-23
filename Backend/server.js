@@ -487,7 +487,7 @@ app.put('/disableproduct/:id',async(req,res)=>{
 
 app.get('/alldriverorders',async(req,res)=>{
     try{
-        const orderArray = await models.allorders.findAll({where:{order_status:1}})
+        const orderArray = await models.allorders.findAll({where:{order_status:2}})
         // console.log("OrdersArray::",orderArray)
         const userRef = await models.users.findAll()
         // console.log("UserRef::",userRef)
@@ -561,7 +561,7 @@ app.put('/selectedorder/:id',async(req,res)=>{
     localUser = JSON.parse(req.headers.user)
     try{
      console.log("Local User Driver:::",localUser)
-     const data = await models.allorders.update({driver_id:localUser.id,order_status:2},{where:{id:req.params.id}})
+     const data = await models.allorders.update({driver_id:localUser.id,order_status:3},{where:{id:req.params.id}})
      const newSelection = {
        driver_id:req.user.id,
        order_id:req.params.id,
@@ -581,7 +581,7 @@ app.put('/selectedorder/:id',async(req,res)=>{
     localUser = JSON.parse(req.headers.user)
     try{
      console.log("Local User Driver:::",localUser)
-     const data = await models.allorders.update({delivered_status:true},{where:{id:req.params.id}})
+     const data = await models.allorders.update({delivered_status:true,order_status:4},{where:{id:req.params.id}})
      res.send(data)
   
     }
@@ -729,6 +729,25 @@ app.put('/selectedorder/:id',async(req,res)=>{
 
         res.send(allOrders)
         console.log("all Orders::",allOrders)
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
+})
+
+app.put('/orderaccept/:id',async(req,res)=>{
+    try{
+        const data = await models.allorders.update({order_status:2},{where:{id:req.params.id}})
+        res.send(data)
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
+})
+app.put('/orderreject/:id',async(req,res)=>{
+    try{
+        const data = await models.allorders.update({order_status:5},{where:{id:req.params.id}})
+        res.send(data)
     }
     catch(err){
         res.status(500).send(err)

@@ -1,1 +1,1 @@
-https://ecommerce-postgres-backend.herokuapp.com/
+https://ecommerce-postgres-backend.herokuapp.com

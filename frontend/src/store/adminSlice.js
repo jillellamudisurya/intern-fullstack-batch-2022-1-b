@@ -35,7 +35,7 @@ export const adminSlice = createSlice({
 
 export function getDriverData(){
     return ((dispatch)=>{
-      fetch('http://localhost:3700/getDrivers')
+      fetch('https://ecommerce-postgres-backend.herokuapp.com/getDrivers')
       .then((res)=>res.json())
       .then((data)=>{
         dispatch(loadDrivers(data))
@@ -45,7 +45,7 @@ export function getDriverData(){
 
   export  function getAllCategories(){
       return((dispatch)=>{
-          fetch("http://localhost:3700/getCategories")
+          fetch("https://ecommerce-postgres-backend.herokuapp.com/getCategories")
           .then((res)=>res.json())
           .then((data)=>{
               dispatch(loadCategories(data))
@@ -55,7 +55,7 @@ export function getDriverData(){
 
   export function getAllProducts(){
       return((dispatch)=>{
-          fetch("http://localhost:3700/getProducts")
+          fetch("https://ecommerce-postgres-backend.herokuapp.com/getProducts")
           .then((res)=>res.json())
           .then((data)=>{
               dispatch(loadProducts(data))
@@ -65,7 +65,7 @@ export function getDriverData(){
 
   export function getAllUsers(){
       return((dispatch)=>{
-        fetch("http://localhost:3700/allusers")
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/allusers")
         .then((res)=>res.json())
         .then((data)=>{
             dispatch(loadUsers(data))
@@ -78,7 +78,7 @@ export function getDriverData(){
     const user = window.localStorage.getItem('user');
     return(dispatch)=>{
       console.log("I am working");
-      fetch('http://localhost:3700/alladminorders',{
+      fetch('https://ecommerce-postgres-backend.herokuapp.com/alladminorders',{
         method:'GET',
         headers:{
           'Content-Type':'application/json',
@@ -94,7 +94,7 @@ export function getDriverData(){
 
   export function addCategory(newCategory){
       return((dispatch)=>{
-        fetch("http://localhost:3700/addCategory",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/addCategory",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -121,7 +121,7 @@ export function getDriverData(){
 
   export function addProduct(newProduct){
     return((dispatch)=>{
-        fetch("http://localhost:3700/addProduct",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/addProduct",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -153,7 +153,7 @@ export function getDriverData(){
 
           console.log("id::",prod.id)
 
-          fetch(`http://localhost:3700/enableproduct/${prod.id}`,{
+          fetch(`https://ecommerce-postgres-backend.herokuapp.com/enableproduct/${prod.id}`,{
               method:'PUT',
               headers:{
                   'Content-Type':'application/json',
@@ -171,7 +171,7 @@ export function getDriverData(){
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user')
 
-        fetch(`http://localhost:3700/disableproduct/${prod.id}`,{
+        fetch(`https://ecommerce-postgres-backend.herokuapp.com/disableproduct/${prod.id}`,{
             method:'PUT',
             headers:{
                 'Content-Type':'application/json',
@@ -184,6 +184,44 @@ export function getDriverData(){
         .catch((err)=>console.log("ProductAvai Err:",err))
     }
 )}
+
+export function orderAccept(id){
+    return(dispatch)=>{
+        const token = window.localStorage.getItem('token');
+        const user = window.localStorage.getItem('user');
+
+        fetch(`https://ecommerce-postgres-backend.herokuapp.com/orderaccept/${id}`,{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json',
+                'token':token,
+                'user':user
+            }
+        })
+        .then((res)=>res.json())
+        .then((data)=>dispatch(getAllOrders()))
+        .catch((err)=>console.log(err))
+    }
+}
+
+export function orderReject(id){
+    return(dispatch)=>{
+        const token = window.localStorage.getItem('token');
+        const user = window.localStorage.getItem('user');
+
+        fetch(`https://ecommerce-postgres-backend.herokuapp.com/orderreject/${id}`,{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json',
+                'token':token,
+                'user':user
+            }
+        })
+        .then((res)=>res.json())
+        .then((data)=>dispatch(getAllOrders()))
+        .catch((err)=>console.log(err))
+    }
+}
 
 export const {loadDrivers,loadCategories,loadProducts,loadUsers,loadAllOrders}  = adminSlice.actions;
 export default adminSlice.reducer;

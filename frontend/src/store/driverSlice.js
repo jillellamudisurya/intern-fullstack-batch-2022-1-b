@@ -24,7 +24,7 @@ export function getTotalOrders(){
   const user = window.localStorage.getItem('user');
   return(dispatch)=>{
     console.log("I am working");
-    fetch('http://localhost:3700/alldriverorders',{
+    fetch('https://ecommerce-postgres-backend.herokuapp.com/alldriverorders',{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -42,7 +42,7 @@ export function getSelectedOrders(){
   const user=window.localStorage.getItem('user')
   return(dispatch)=>{
   
-    fetch('http://localhost:3700/selectedorders',{
+    fetch('https://ecommerce-postgres-backend.herokuapp.com/selectedorders',{
       method:'GET',
       headers:{
         'Content-Type':'application/json',
@@ -61,7 +61,7 @@ export function selectedOrder(id){
   const user = window.localStorage.getItem('user');
 
   return(dispatch)=>{
-    fetch(`http://localhost:3700/selectedorder/${id}`,{
+    fetch(`https://ecommerce-postgres-backend.herokuapp.com/selectedorder/${id}`,{
       method:'PUT',
       headers:{
         'Content-Type':'application/json',
@@ -80,7 +80,7 @@ export function deliveredOrder(id){
   const user = window.localStorage.getItem('user');
 
   return (dispatch)=>{
-    fetch(`http://localhost:3700/deliveredorder/${id}`,{
+    fetch(`https://ecommerce-postgres-backend.herokuapp.com/deliveredorder/${id}`,{
       method:'PUT',
       headers:{
         'Content-Type':'application/json',
@@ -101,4 +101,4 @@ export function deliveredOrder(id){
 export const { loadTotalOrders,loadSelectedOrders} = driverSlice.actions;
 export default driverSlice.reducer;
 
-// http://localhost:3700
+// https://ecommerce-postgres-backend.herokuapp.com

@@ -27,7 +27,7 @@ export const authenticationSlice = createSlice({
 
 export function getData(){
     return((dispatch)=>{
-        fetch('http://localhost:3700/allusers',{
+        fetch('https://ecommerce-postgres-backend.herokuapp.com/allusers',{
         })
         .then((res)=>res.json())
         .then((data)=>dispatch(loadusers(data)))
@@ -36,7 +36,7 @@ export function getData(){
 
 export function loginUser(loguser){
     return(dispatch)=>{
-        fetch("http://localhost:3700/loginauthentication",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/loginauthentication",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -90,7 +90,7 @@ export function loginUser(loguser){
 
 export function registerUser(newuser){
     return(dispatch)=>{
-        fetch("http://localhost:3700/registeruser",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/registeruser",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -118,7 +118,7 @@ export function registerUser(newuser){
 export function addDriver(newUser){
     return (dispatch)=>{
 
-        fetch("http://localhost:3700/addDriver",{
+        fetch("https://ecommerce-postgres-backend.herokuapp.com/addDriver",{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

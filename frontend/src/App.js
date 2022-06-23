@@ -18,6 +18,7 @@ import ProductsScreen from './components/AdminScreens/productsScreen';
 import Cart from './components/UserScreens/cart';
 import Address from './components/UserScreens/Address';
 import SelectedOrders from './components/DriverScreens/SelectedOrders';
+import PlacedOrders from './components/UserScreens/PlacedOrders';
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
 
           <Route path='/user/cart' element={<Cart/>}/>
           <Route path='/user/address' element={<Address/>}/>
-          {/* <Route path='/user/allorders' element={<AllOrders/>}/> */}
+          <Route path='/user/placedorders' element={<PlacedOrders/>}/>
 
           {/* Driver Screens */}
           <Route path="/driver/selectedorders" element={<SelectedOrders/>}/>
