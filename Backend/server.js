@@ -26,6 +26,8 @@ var jwt = require('jsonwebtoken');
 // var jwtUser = require('./jwt/user_jwt')
 // var jwtDriver = require('./jwt/driver_jwt')
 
+const getDistancesFromOrigin = require('./routes/distancematrix.js');
+
 var port = process.env.PORT || 3700
 
 app.get('/',async(req,res)=>{
@@ -563,12 +565,13 @@ app.put('/selectedorder/:id',async(req,res)=>{
      console.log("Local User Driver:::",localUser)
      const data = await models.allorders.update({driver_id:localUser.id,order_status:3},{where:{id:req.params.id}})
      const newSelection = {
-       driver_id:req.user.id,
+       driver_id:localUser.id,
        order_id:req.params.id,
        delivered_status:false
      }
   
      const driverOrdersRef = await models.driverorders.create(newSelection);
+     console.log("Driver Orders Reference",driverOrdersRef)
      res.send(driverOrdersRef)
   
     }
@@ -577,16 +580,56 @@ app.put('/selectedorder/:id',async(req,res)=>{
     }
   })
 
-  app.put('/deliveredorder/:id',async(req,res)=>{
+  app.post('/deliveredorder',async(req,res)=>{
+    console.log("DeliveredBody::",req.body)
+    const{currentAddress,NextAddress,index,length}=req.body;
     localUser = JSON.parse(req.headers.user)
-    try{
-     console.log("Local User Driver:::",localUser)
-     const data = await models.allorders.update({delivered_status:true,order_status:4},{where:{id:req.params.id}})
-     res.send(data)
-  
+    try{  
+        console.log(index);
+        console.log(length)
+        if(index===length){
+            console.log("I am condition performing")
+            const order=await models.allorders.findOne({where:{id:currentAddress.id}})
+            const drord=await models.driverorders.findOne({where:{order_id:currentAddress.id}})
+            const pr=await models.routes.findOne({where:{order_id:currentAddress.id}})
+            const ar=await models.allroutes.findOne({where:{id:pr.route_id}})
+            
+            order.delivered_status=true
+            order.order_status=4
+            drord.delivered_status=true
+            ar.visited_status=true
+            pr.flag=false
+
+            drord.save()
+            order.save()
+            pr.save()
+            ar.save()
+        }
+        else{
+            console.log("I am Performing HEre I am else")
+            const order=await models.allorders.findOne({where:{id:currentAddress.id}})
+            console.log("OrderrraUnga::",order)
+            const drord=await models.driverorders.findOne({where:{order_id:currentAddress.id}})
+            const pr=await models.routes.findOne({where:{order_id:currentAddress.id}})
+            const nr=await models.routes.findOne({where:{order_id:NextAddress.id}})
+            const ar=await models.allroutes.findOne({where:{id:pr.route_id}})
+
+            order.delivered_status=true
+            order.order_status=4
+            drord.delivered_status=true
+            nr.flag=true
+            pr.flag=false
+
+            drord.save()
+            order.save() 
+            nr.save()
+            pr.save()
+
+        }
+        res.send("success")
     }
     catch(err){
-      console.log(err)
+        res.status(500).send(err)
     }
   })
 
@@ -751,6 +794,174 @@ app.put('/orderreject/:id',async(req,res)=>{
     }
     catch(err){
         res.status(500).send(err)
+    }
+})
+
+//Routes
+app.get('/setroute',async(req,res)=>{
+    var localUser = JSON.parse(req.headers.user);
+    const id = localUser.id
+    const ar = await models.allroutes.create({driver_id:parseInt(localUser.id),visited_status:false})
+    await models.sequelize.query(`SELECT *  from allorders,driverorders,addresses where driverorders.order_id=allorders.id AND driverorders.driver_id=${id} AND driverorders.delivered_status=false AND allorders.address_id=addresses.id`)
+    .then((data)=>{
+        console.log("Data",data)
+        console.log("I am Here in SetRoute")
+        if(data[0].length>0){
+            const routes = [];
+            const latLangs = data[0].map((item) => item.lanlat);
+            console.log("latLangs",latLangs)
+            const addresses = data[0].map((item) => item.address);
+            const origins=['Ullagallu, Andhra Pradesh, India']
+
+            var destinations = latLangs.map(
+                (item)=>
+                    JSON.parse(item).lat+
+                    ','+
+                    JSON.parse(item).lng
+            );
+            console.log("Destinations",destinations)
+            getDistancesFromOrigin(origins, destinations)
+                .then((distances) => {
+                    console.log("I am inside destinations")
+                    for (let i = 0; i < data[0].length; i++) {
+                        if (i === 0) {
+                            routes.push({
+                                route_id:ar.id,
+                                order_id: data[0][i].order_id,
+                                address: data[0][i].address,
+                                distance: distances[i].distance,
+                                flag: false,
+                            });
+                        } else {
+                            routes.push({
+                                route_id:ar.id,
+                                order_id: data[0][i].order_id,
+                                address: data[0][i].address,
+                                distance: distances[i].distance,
+                                flag: true,
+                            });
+                        }
+                    }
+                    console.log("Hey Routes",routes)
+                    routes.sort((a,b)=>{
+                        return parseInt(a.distance)-parseInt(b.distance)
+                      }
+                    )
+                    
+                    const ir=models.routes.bulkCreate(routes)
+                    console.log("ir",ir)
+                    res.status(200).send("Created")
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+        }
+        else{
+            console.log("No Data");
+            res.status(200).json({
+                success:false,
+                message:'No Orders Found'
+            });
+        }
+    })
+})
+
+app.get('/getroutes',async(req,res)=>{
+    var localUser = JSON.parse(req.headers.user);
+
+    // console.log("Local User in GetRoute",localUser)
+    // console.log(typeof(localUser.id))
+
+    try{
+        // console.log("I am inside try")
+        const orderarray=await models.allorders.findAll({where:{driver_id:localUser.id,delivered_status:false}})
+        // console.log(orderarray)
+        const u=await models.users.findAll()
+        const productsarray=await models.orderedproducts.findAll();
+        const rel=await models.allroutes.findAll({where:{visited_status:false,driver_id:localUser.id}})
+        // console.log(rel)
+        const rts=await models.routes.findAll({where:{route_id:rel[0].id}})
+        console.log("I am rts",rts)
+        const p=await models.products.findAll()
+        const allorders=[]
+        orderarray.map((oa)=>{
+            console.log("I am inside orderarray")
+            const order={}
+            order.id=oa.id,
+            u.map((user)=>{
+                if(oa.user_id===user.id){
+                    order.user_id=user.id;
+                    order.customer=user.name
+                    order.phonenumber=user.phonenumber
+                }
+            })
+            rts.map((rt,i)=>{
+                console.log("I am inside rts")
+                if(rt.order_id===oa.id){
+                    const root={
+                        distance:rt.distance,
+                        flag:rt.flag,
+                        address:rt.address,
+                        route_id:rt.route_id,
+
+                    }
+                    order.route=root
+                }
+            })
+            console.log(order.route)
+            order.amount=oa.order_amount,
+            order.driver_id=oa.driver_id,
+            order.delivered_status=oa.delivered_status;
+            let date=new Date(oa.ordered_at)
+            date.setDate(date.getDate()+7)
+            order.ordered_at=oa.ordered_at.getDate()+"/"+parseInt(oa.ordered_at.getMonth()+1)+"/"+oa.ordered_at.getFullYear();
+            const allproducts=[]
+            productsarray.map((pa)=>{
+                if(oa.id===pa.order_id){
+                    p.map((ep)=>{
+                        if(pa.product_id===ep.id){
+                            const pro={
+                                product_id:pa.product_id,
+                                name:ep.name,
+                                price:pa.price,
+                                quantity:pa.quantity
+                            }
+                            allproducts.push(pro)
+                        }
+                    })
+                }
+
+            })
+            order.products=allproducts
+
+            allorders.push(order)
+           
+        })  
+
+            var values=allorders.sort((a,b)=>{
+                return parseInt(a.route.distance)-parseInt(b.route.distance)
+            })
+            console.log("I am Values::",values)
+            for(var i=0;i<values.length;i++){
+                if(i==0){
+                    const r=await models.routes.findOne({where:{order_id:values[i].id}})
+                    r.flag=true
+                    r.save()
+                    values[i].route.flag=true
+                }
+                else{
+                    values[i].route.flag=false
+                }
+            }
+            res.send(values)
+            
+            
+        }
+    catch(err){
+        
+        res.status(500).send(err)
+
     }
 })
 

@@ -4,6 +4,7 @@ export const driverSlice= createSlice({
   initialState: {
     totalOrders:[],
     selectedOrders:[],
+    routes:[]
   },
   reducers: {
 
@@ -15,6 +16,11 @@ export const driverSlice= createSlice({
     loadSelectedOrders:(state,action)=>{
       state.selectedOrders=[]
       state.selectedOrders.push(action.payload)
+    },
+    loadRoutes:(state,action)=>{
+      state.routes=[]
+      state.routes.push(action.payload)
+      console.log("state Routes",state.routes)
     }
   },
 });
@@ -75,13 +81,52 @@ export function selectedOrder(id){
   }
 }
 
-export function deliveredOrder(id){
+export function deliveredOrder(currentAddress,NextAddress,index,length){
   const token = window.localStorage.getItem('token');
   const user = window.localStorage.getItem('user');
 
   return (dispatch)=>{
-    fetch(`https://ecommerce-postgres-backend.herokuapp.com/deliveredorder/${id}`,{
-      method:'PUT',
+    fetch('https://ecommerce-postgres-backend.herokuapp.com/deliveredorder',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'token':token,
+        'user':user
+      },
+      body:JSON.stringify({currentAddress,NextAddress,index,length})
+    })
+    .then((res)=>res.json())
+    .then((data)=>dispatch(getRoutes()))
+    .catch((err)=>console.log(err))
+  }
+}
+
+
+export function setRoute(){
+  const token = window.localStorage.getItem('token');
+  const user = window.localStorage.getItem('user');
+
+  return (dispatch)=>{
+    fetch("https://ecommerce-postgres-backend.herokuapp.com/setroute",{
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+        'token':token,
+        'user':user
+      }
+    })
+    .then((res)=>dispatch(getRoutes()))
+    .catch((err)=>console.log(err))
+  }
+}
+
+export function getRoutes(){
+  const token = window.localStorage.getItem('token');
+  const user = window.localStorage.getItem('user');
+
+  return(dispatch)=>{
+    fetch('https://ecommerce-postgres-backend.herokuapp.com/getroutes',{
+      method:'GET',
       headers:{
         'Content-Type':'application/json',
         'token':token,
@@ -89,7 +134,7 @@ export function deliveredOrder(id){
       }
     })
     .then((res)=>res.json())
-    .then((data)=>dispatch(getSelectedOrders()))
+    .then((data)=>dispatch(loadRoutes(data)))
     .catch((err)=>console.log(err))
   }
 }
@@ -97,8 +142,7 @@ export function deliveredOrder(id){
 
 
 
-
-export const { loadTotalOrders,loadSelectedOrders} = driverSlice.actions;
+export const { loadTotalOrders,loadSelectedOrders,loadRoutes} = driverSlice.actions;
 export default driverSlice.reducer;
 
 // https://ecommerce-postgres-backend.herokuapp.com
